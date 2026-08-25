@@ -6,7 +6,7 @@ Public file sharing repository with direct download links.
 
 For any file in this repository, use this format:
 ```
-https://raw.githubusercontent.com/Neviapollyanna/public-files-share/main/path/to/file.ext
+https://raw.githubusercontent.com/Neviapollyanna/x7m2k9q4v8w3y1z6r5t4u3/main/path/to/file.ext
 ```
 
 Or via GitHub UI: click the file → click "Raw" button → copy URL.
@@ -22,7 +22,7 @@ Or via GitHub UI: click the file → click "Raw" button → copy URL.
 ```
 
 ## Example direct links
-- `https://raw.githubusercontent.com/Neviapollyanna/public-files-share/main/files/example.txt`
-- `https://raw.githubusercontent.com/Neviapollyanna/public-files-share/main/docs/guide.md`
+- `https://raw.githubusercontent.com/Neviapollyanna/x7m2k9q4v8w3y1z6r5t4u3/main/files/example.txt`
+- `https://raw.githubusercontent.com/Neviapollyanna/x7m2k9q4v8w3y1z6r5t4u3/main/docs/guide.md`
 
 **Note:** Files must be committed to `main` branch. Raw links work immediately after push.
