@@ -5,17 +5,18 @@
 > **Лицензия:** MIT (коммерческое использование бесплатно)
 > **Авторы:** Tsinghua University (THU-MAIC)
 > **Версия:** v1.0.0 (стабильная)
-> **Звёзды:** 27,264 ⭐ | **Форки:** 4,772 | **Коммиты:** 487
+> **Звёзды:** 27,264 ⭐ | **Форки:** 4,772 | **Контрибьюторы:** 63 | **Коммиты:** 487
+> **Open Issues:** 156 | **PR (open/closed):** 46 / 675
 
 ---
 
 ## 📋 Executive Summary
 
-**OpenMAIC** — это open-source платформа от Tsinghua University, которая превращает любую тему или документ в интерактивный AI-класс с多агентными учителями и одноклассниками. Проект生成ирует слайды, тесты, интерактивные симуляции и проектное обучение (PBL), которые озвучиваются AI-учителями и AI-классниками в реальном времени.
+**OpenMAIC** — это единственная полностью open-source (MIT) платформа от Tsinghua University, которая превращает любую тему или документ в интерактивный AI-класс с multi-agent учителями и одноклассниками. Проект генерирует слайды, тесты, интерактивные симуляции и проектное обучение (PBL), которые озвучиваются AI-агентами в реальном времени.
 
-**Ключевой инсайт:** Это НЕ просто генератор слайдов — это полноценная AI-классная комната с multi-agent оркестрацией, которая имитирует реальный учебный процесс.
+**Ключевой инсайт:** Это НЕ просто генератор слайдов — это полноценная AI-классная комната с multi-agent оркестрацией, имитирующая реальный учебный процесс.
 
-**Вердикт:** 🔥 **Высокая рыночная актуальность** (edtech AI — взрывной рост), **средняя сложность внедрения** (Node.js + PostgreSQL), **отличная архитектура** (LangGraph + плагиновая персистентность).
+**Вердикт:** 🔥 **Высокая рыночная актуальность** (AI in Education — $11.4 млрд в 2026, CAGR 25.9%), **средняя сложность внедрения** (Node.js + PostgreSQL), **отличная архитектура** (LangGraph + плагиновая персистентность).
 
 ---
 
@@ -36,11 +37,19 @@ OpenMAIC/
 └── Storage                → Документы, runtime, KV, assets, agent sessions
 ```
 
+**SDK пакеты (`@openmaic/*`):**
+- `@openmaic/dsl` — версионированный контракт данных слайдов
+- `@openmaic/renderer` — React-рендерер
+- `@openmaic/editor` — composable editing core
+- `@openmaic/importer` — PPTX импорт
+- `@openmaic/generation` — генерационный pipeline
+- `@openmaic/storage` — персистентность (swappable stores)
+
 ### 1.2 Типы контента (Scene Types)
 
 | Тип | Описание | Уникальность |
 |-----|----------|-------------|
-| **Slides** | AI-генерируемые слайды с формулами, графиками | Средняя (есть у всех) |
+| **Slides** | AI-генерируемые слайды с формулами, графиками, LaTeX | Средняя |
 | **Quizzes** | Интерактивные тесты с оценкой | Средняя |
 | **Interactive HTML** | Самостоятельные веб-страницы с симуляциями | 🔥 Высокая |
 | **PBL (Project-Based Learning)** | Проектные задания с classroom UI | 🔥 Высокая |
@@ -53,20 +62,21 @@ OpenMAIC/
 
 **AI Учитель:**
 - Контролирует прогресс урока
-- Объясняет контент
-- Задаёт вопросы
-- Навигирует по слайдам
+- Объясняет контент, рисует на доске
+- Задаёт вопросы, навигирует по слайдам
+- Озвучивается через VoxCPM2 (voice cloning)
 
 **AI Классники (4 preset архетипа):**
-- 🎪 **Class Clown** — творчество, поддержка внимания
-- 🧠 **Deep Thinker** — глубокие вопросы, интеллектуальный вызов
-- 📝 **Note Taker** — резюмирование ключевых моментов
-- ❓ **Inquisitive Mind** — любопытство, стимулирование диалога
+- 🎪 **Class Clown** — творчество, поддержка внимания (TI, EC, CM)
+- 🧠 **Deep Thinker** — глубокие вопросы, интеллектуальный вызов (TI, ID)
+- 📝 **Note Taker** — резюмирование ключевых моментов (TI, CM)
+- ❓ **Inquisitive Mind** — любопытство, стимулирование диалога (TI, EC)
 
 **Session Controller:**
-- Class State Receptor — мониторит состояние класса
+- Class State Receptor — мониторит состояние класса (история диалогов)
 - Manager Agent — принимает решения о следующем действии
 - Динамическое управление: нет жёстких SOP, адаптация к контексту
+- Формализация: `f_L: S_t → (a_t, T_n)` — из состояния класса выбирается агент и действие
 
 ### 1.4 Технологический стек
 
@@ -81,6 +91,20 @@ OpenMAIC/
 | STT | Azure STT / FunASR | ✅ Зрелый |
 | Export | PPTX / HTML / ZIP / MP4 | ✅ Полный |
 | Deployment | Vercel / Docker / Self-hosted | ✅ Гибкий |
+| Primary Language | TypeScript | ✅ |
+| Package Manager | pnpm 10+ | ✅ |
+| Node.js | ≥ 20 | ✅ |
+
+### 1.5 История релизов (2026)
+
+| Дата | Версия | Ключевые изменения |
+|------|--------|-------------------|
+| 2026-03-11 | Репозиторий создан | First commit |
+| 2026-04-26 | v0.2.1 | VoxCPM2 TTS, voice cloning, completion page |
+| 2026-06-02 | v0.2.2 | MAIC Editor v0, Pro Mode, offline classroom, Brave/Baidu search |
+| 2026-06-28 | v0.3.0 | PBL v2, Edit with AI, SDK family, per-stage model routing |
+| 2026-08-14 | v0.3.2 | Video export, Postgres stack, incremental saves |
+| 2026-08-27 | v1.0.0 | Agent Workbench, 20 built-in skills, session materials |
 
 ---
 
@@ -96,6 +120,7 @@ OpenMAIC/
 | **Диск** | 1 GB | 5 GB | 20+ GB |
 | **PostgreSQL** | — | Для хранения курсов | Для продакшна |
 | **LLM API** | ≥ 1 ключ | Несколько провайдеров | Self-hosted |
+| **FFmpeg** | — | Для MP4 экспорта | Для видео |
 
 ### 2.2 Этапы внедрения
 
@@ -105,41 +130,46 @@ git clone https://github.com/THU-MAIC/OpenMAIC.git
 cd OpenMAIC
 pnpm install
 cp .env.example .env.local
-# Заполнить .env.local хотя бы одним ключом LLM
+# Заполнить хотя бы одним ключом LLM
 pnpm dev
 ```
-**Сложность:** 🟢 Низкая.任何人都 может запустить за 30 минут.
+**Сложность:** 🟢 2/10. Любой может запустить за 30 минут.
 
 #### Этап 2: Настройка PostgreSQL (30 минут)
 ```bash
-# Docker compose для PostgreSQL
 docker compose -f docker-compose.postgres.yml up -d
-# Включить в .env.local:
+# В .env.local:
 # DATABASE_URL=postgres://openmaic:openmaic-dev@postgres:5432/openmaic
 ```
-**Сложность:** 🟡 Средняя. Нужны знания Docker + PostgreSQL.
+**Сложность:** 🟡 4/10. Нужны знания Docker + PostgreSQL.
 
-#### Этап 3: Настройка агентного runtime (1 час)
+#### Этап 3: Агентный runtime (1 час)
 ```env
 NEXT_PUBLIC_PRO_WORKBENCH_ENABLED=true
 OPENMAIC_AGENT_RUNTIME_ENABLED=true
 DATABASE_URL=postgres://...
 MODEL_ROUTES='{"maic-agent-driver":{"model":"openai:gpt-5.5","api":"openai-completions"}}'
 ```
-**Сложность:** 🟡 Средняя. Нужно понимать model routing.
+**Сложность:** 🟡 4/10. Нужно понимать model routing.
 
-#### Этап 4: Продакшн деплой (2-4 часа)
-- Vercel: One-click deploy (самый простой)
-- Docker: `docker compose --profile video-export up --build`
-- Self-hosted: Next.js production build
+#### Этап 4: MP4 видео-экспорт (30 минут)
+```bash
+docker compose --profile video-export up --build
+```
+**Сложность:** 🟡 3/10. Docker + FFmpeg.
 
-**Сложность:** 🟡 Средняя-Высокая. Зависит от инфраструктуры.
+#### Этап 5: Продакшн деплой (2-4 часа)
+- **Vercel:** One-click deploy (самый простой)
+- **Docker:** `docker compose --profile video-export up --build`
+- **Self-hosted:** Next.js production build
 
-#### Этап 5: Интеграция с OpenClaw (30 минут)
+**Сложность:** 🟠 6/10. Зависит от инфраструктуры.
+
+#### Этап 6: Интеграция с OpenClaw (30 минут)
 ```bash
 clawhub install openmaic
 ```
-**Сложность:** 🟢 Низкая. Plug-and-play.
+**Сложность:** 🟢 2/10. Plug-and-play.
 
 ### 2.3 Общая оценка сложности
 
@@ -147,64 +177,113 @@ clawhub install openmaic
 |--------|-----------|-------------|
 | **Установка** | 🟢 2/10 | `pnpm install` + `.env` |
 | **Базовая работа** | 🟢 2/10 | `pnpm dev` |
-| **Настройка моделей** | 🟡 4/10 | Нужно понимать API-ключи |
+| **Настройка моделей** | 🟡 4/10 | API-ключи, model routing |
 | **PostgreSQL** | 🟡 4/10 | Docker compose |
-| **Агентный runtime** | 🟠 6/10 | LangGraph, model routing |
+| **Агентный runtime** | 🟡 5/10 | LangGraph, сессии |
 | **Продакшн деплой** | 🟠 6/10 | Зависит от платформы |
-| **Кастомизация агентов** | 🔴 7/10 | Промпты, роли, поведение |
-| **Кастомизация генерации** | 🔴 7/10 | Pipeline, prompts, extraction |
+| **Кастомизация агентов** | 🟠 6/10 | Промпты, роли, поведение |
+| **Кастомизация генерации** | 🟠 6/10 | Pipeline, prompts |
 | **Масштабирование** | 🟠 6/10 | PostgreSQL, S3, queues |
+| **Интеграция в LMS** | 🔴 7/10 | LTI, SCORM, xAPI |
 
-**Средняя сложность: 4.75/10** — доступно для разработчика среднего уровня.
+**Средняя сложность: 4.7/10** — доступно для разработчика среднего уровня.
 
 ---
 
 ## 3. 📊 Рыночная актуальность
 
-### 3.1 EdTech AI рынок (2025-2026)
+### 3.1 AI in Education рынок (2025-2026)
 
 | Метрика | Значение | Источник |
 |---------|----------|----------|
-| **Рынок AI в образовании (2025)** | $4.0 млрд | HolonIQ |
-| **Рынок AI в образовании (2026)** | $5.7 млрд (+42%) | HolonIQ |
-| **CAGR (2023-2030)** | 36.0% | MarketsandMarkets |
-| **EdTech рынок整体 (2026)** | $404 млрд | Statista |
-| **Доля AI в EdTech** | ~1.4% и растёт | Вычисление |
+| **AI in Education (2025)** | $7.05-8.3 млрд | Grand View Research / Precedence Research |
+| **AI in Education (2026)** | $9.58-11.4 млрд | Grand View Research / Precedence Research |
+| **AI in Education (2033)** | $57.2 млрд | Grand View Research |
+| **CAGR (2026-2033)** | 25.9-40.9% | Разные источники |
+| **AI Tutors (2025)** | $2.1 млрд | Grand View Research |
+| **AI Tutors (2026)** | $2.7 млрд | Grand View Research |
+| **AI Tutors (2033)** | $17.7 млрд | Grand View Research |
+| **EdTech整体 (2025)** | $189.15 млрд | Fortune Business Insights |
+| **EdTech整体 (2026)** | $214.58 млрд | Fortune Business Insights |
 
-**Тренды:**
-- 🔥 **Multi-Agent AI tutoring** — главный тренд 2026
-- 🔥 **Персонализация через AI** — адаптивное обучение
-- 🔥 **Interactive simulations** — замена статичных курсов
-- 🔥 **Voice/Avatar AI teachers** — озвученные AI-учителя
-- 📈 **LLM в образовании** — рост investment на 280% YoY
+**Ключевые драйверы роста:**
+1. 🔥 Персонализация обучения через AI
+2. 🔥 Дефицит учителей → AI-замена
+3. 🔥 Генерация контента (Text → Course)
+4. 🔥 Корпоративное обучение (L&D)
+5. 📈 Государственные инициативы EdTech
+6. 📈 Послепандемийный digital-адаптинг
+
+**Ключевые сегменты:**
+- K-12 AI инструменты
+- Высшее образование AI
+- Корпоративное обучение (L&D)
+- AI tutoring платформы
+- Инструменты генерации контента
+- Оценка и аналитика
 
 ### 3.2 Конкурентная карта
 
-| Проект | Тип | ⭐ | Лицензия | Multi-Agent | PBL | Export | Статус |
-|--------|-----|---|----------|-------------|-----|--------|--------|
-| **OpenMAIC** | Classroom | 27K | MIT | ✅ | ✅ | PPTX/HTML/ZIP/MP4 | 🔥 Активный |
-| **DeepTutor** | Tutoring | ~3K | MIT | ✅ | ❌ | ❌ | ⚠️ Менее активный |
-| **Khan Academy Khanmigo** | Tutoring | N/A | Проприетарный | ❌ | ❌ | ❌ | 🏢 Коммерческий |
-| **Coursera AI** | Course Gen | N/A | Проприетарный | ❌ | ❌ | ❌ | 🏢 Коммерческий |
-| **Synthesia** | Video Gen | N/A | Проприетарный | ❌ | ❌ | MP4 | 🏢 $2.1B оценка |
-| **Hour One** | Video Gen | N/A | Проприетарный | ❌ | ❌ | MP4 | 🏢 Коммерческий |
-| **Synthflow** | Chatbot | N/A | Проприетарный | ❌ | ❌ | ❌ | 🏢 Конструктор |
-| **AutoGen (MS)** | Multi-Agent | 37K | MIT | ✅ | ❌ | ❌ | 📚 Библиотека |
-| **CrewAI** | Multi-Agent | 25K | MIT | ✅ | ❌ | ❌ | 📚 Фреймворк |
-| **LangGraph** | Orchestration | 10K | MIT | ✅ | ❌ | ❌ | 📚 Фреймворк |
+| Проект | Тип | ⭐ GitHub | Лицензия | Multi-Agent | Classroom | Export | Статус |
+|--------|-----|----------|----------|-------------|-----------|--------|--------|
+| **OpenMAIC** | Classroom | 27,264 | MIT | ✅ | ✅ | PPTX/HTML/ZIP/MP4 | 🔥 Активный |
+| **DeepTutor** | Tutoring | 37,952 | Apache-2.0 | ✅ | ❌ (1:1) | ❌ | 🔥 Активный |
+| **Khanmigo** | Tutoring | N/A | Проприетарный | ❌ | ❌ | ❌ | 🏢 Khan Academy |
+| **Curipod** | Presentations | N/A | Freemium | ❌ | ❌ | ❌ | 🏢 Коммерческий |
+| **MagicSchool AI** | Tools for Teachers | N/A | Проприетарный | ❌ | ❌ | ❌ | 🏢 60+ tools |
+| **Synthesia** | Video Gen | N/A | Проприетарный | ❌ | ❌ | MP4 | 🏢 $4B оценка |
+| **Hour One** | Video Gen | N/A | Проприетарный | ❌ | ❌ | MP4 | 🏢 $6.67M funding |
+| **Synthflow** | Voice AI | N/A | Проприетарный | ❌ | ❌ | ❌ | 🏢 $20M Series A |
+| **SchoolAI** | Co-teaching | N/A | Проприетарный | ❌ | ❌ | ❌ | 🏢 District platform |
+| **Eduaide.ai** | Teacher Tools | N/A | Проприетарный | ❌ | ❌ | ❌ | 🏢 MagicSchool alt |
+| **Diffit** | Reading | N/A | Проприетарный | ❌ | ❌ | ❌ | 🏢 Text leveling |
+| **EduAgent** | Tutoring | N/A | Open Source | ✅ | ❌ | ❌ | ⚠️ Маленький |
+| **AutoGen (MS)** | Framework | 37,000+ | MIT | ✅ | ❌ | ❌ | 📚 Библиотека |
+| **CrewAI** | Framework | 25,000+ | MIT | ✅ | ❌ | ❌ | 📚 Фреймворк |
 
-### 3.3 Уникальные конкурентные преимущества OpenMAIC
+### 3.3 Анализ конкурентов (детальный)
+
+#### DeepTutor (главный open-source конкурент)
+| Параметр | DeepTutor | OpenMAIC |
+|----------|-----------|----------|
+| **Организация** | HKUDS (Hong Kong University) | THU-MAIC (Tsinghua) |
+| **Фокус** | 1:1 персонализированный тьютор | Classroom simulation (1 Student + N Agents) |
+| **Multi-agent** | ✅ (RAG-based knowledge) | ✅ (LangGraph orchestration) |
+| **Экспорт** | ❌ | ✅ PPTX/HTML/ZIP/MP4 |
+| **Classroom UI** | ❌ | ✅ AI teacher + classmates |
+| **Voice/TTS** | ❌ | ✅ VoxCPM2 |
+| **OpenClaw** | ❌ | ✅ Chat app integration |
+| **GitHub Stars** | 37,952 | 27,264 |
+| **Ключевое отличие** | Personal tutor (deep learning) | Classroom simulation (multi-agent) |
+
+**Вывод:** DeepTutor — более звёздный, но OpenMAIC уникален classroom simulation. Это РАЗНЫЕ ниши.
+
+#### Synthesia (коммерческий лидер)
+| Параметр | Synthesia | OpenMAIC |
+|----------|-----------|----------|
+| **Оценка** | $4 млрд | N/A (open-source) |
+| **Фокус** | AI avatar video generation | Classroom simulation |
+| **Формат** | MP4 видео | Slides + HTML + PBL + Classroom |
+| **Языки** | 120+ | Зависит от LLM |
+| **Корпоративный** | ✅ Enterprise | ⚠️ Self-hosted |
+| **Цена** | $22-67/мес | Бесплатно (LLM costs) |
+
+**Вывод:** Synthesia — видео-аватары для маркетинга. OpenMAIC — classroom для обучения. Разные use cases.
+
+### 3.4 Уникальные конкурентные преимущества OpenMAIC
 
 1. **Единственный open-source multi-agent classroom** — нет прямых аналогов
-2. **PBL + Interactive HTML** — уникальная комбинация
-3. **AI Teacher + AI Classmates** — имитация реального класса
+2. **PBL + Interactive HTML + Classroom** — уникальная комбинация
+3. **AI Teacher + AI Classmates** — имитация реального класса (не 1:1 tutoring)
 4. **Voice cloning (VoxCPM2)** — озвученные AI-учителя
 5. **OpenClaw integration** — генерация из Telegram/Slack/Discord
 6. **Tsinghua University backing** — академическая репутация
 7. **MIT license** — коммерческое использование бесплатно
 8. **27K+ stars** — подтверждённый интерес сообщества
+9. **SDK пакеты** — расширяемая архитектура (`@openmaic/*`)
+10. **Per-stage model routing** — разные модели для разных этапов генерации
 
-### 3.4 Риски и слабости
+### 3.5 Риски и слабости
 
 | Риск | Серьёзность | Митигация |
 |------|-------------|-----------|
@@ -213,7 +292,9 @@ clawhub install openmaic
 | **Качество генерации** | 🟡 Средняя | Зависит от модели, Pro Mode |
 | **Китайско-ориентированный** | 🟡 Средняя | Английский интерфейс есть |
 | **Быстрые релизы** | 🟡 Средняя | Сложно следить за изменениями |
-| **Нет мобильного приложения** | 🟡 Средняя | Web-responsive |
+| **156 open issues** | 🟡 Средняя | Активная разработка |
+| **Нет mobile app** | 🟡 Средняя | Web-responsive |
+| **Нет LMS интеграции** | 🟡 Средняя | SCORM/LTI/xAPI нет |
 | **Нет offline-first** | 🟢 Низкая | Browser storage + PostgreSQL |
 
 ---
@@ -229,33 +310,33 @@ clawhub install openmaic
 | **Marketplace курсов** | Продажа AI-сгенерированных курсов | 🔥 Высокий |
 | **API access** | Генерация через API | 🟡 Средний |
 | **Custom deployment** | Внедрение для вузов/корпораций | 🔥 Высокий |
-| **White-label** | Ребрендинг под образовательные платформы | 🟡 Средний |
+| **White-label** | Ребрендинг под EdTech платформы | 🟡 Средний |
 
 ### 4.2 Целевые сегменты
 
-| Сегмент | Потребность | Готовность платить |
-|---------|-------------|-------------------|
-| **Онлайн-платформы (Coursera-style)** | Генерация курсов | 🔥 Да |
-| **Корпоративное обучение** | Быстрые онбординг-курсы | 🔥 Да |
-| **Вузы и школы** | AI-лекторы + интерактив | 🟡 Возможно |
-| **Конструкторы курсов** | Ускорение создания контента | 🔥 Да |
-| **EdTech стартапы** | Готовый AI backend | 🔥 Да |
-| **Сольные educator'ы** | Быстрая генерация уроков | 🟡 Средний чек |
+| Сегмент | Потребность | Готовность платить | Приоритет |
+|---------|-------------|-------------------|-----------|
+| **Онлайн-платформы (Coursera-style)** | Генерация курсов | 🔥 Да | 1 |
+| **Корпоративное обучение** | Быстрые онбординг-курсы | 🔥 Да | 2 |
+| **EdTech стартапы** | Готовый AI backend | 🔥 Да | 3 |
+| **Конструкторы курсов** | Ускорение создания контента | 🔥 Да | 4 |
+| **Вузы и школы** | AI-лекторы + интерактив | 🟡 Возможно | 5 |
+| **Сольные educator'ы** | Быстрая генерация уроков | 🟡 Средний чек | 6 |
 
 ### 4.3 Оценка рыночного потенциала
 
 | Метрика | Консервативная | Оптимистичная |
 |---------|----------------|---------------|
-| **TAM (AI EdTech)** | $5.7 млрд (2026) | $10+ млрд (2028) |
+| **TAM (AI Education)** | $11.4 млрд (2026) | $57.2 млрд (2033) |
 | **SAM (AI Course Gen)** | $500 млн | $1.5 млрд |
-| **SOM (для OpenMAIC-based продукта)** | $5-10 млн/год | $50+ млн/год |
+| **SOM (OpenMAIC-based)** | $5-10 млн/год | $50+ млн/год |
 | **Срок окупаемости** | 12-18 мес | 6-12 мес |
 
 ---
 
 ## 5. 🛠️ Рекомендации по внедрению
 
-### 5.1 Для快速 старт (MVP)
+### 5.1 Для быстрого старта (MVP)
 
 ```
 1. Клонировать → pnpm install → pnpm dev
@@ -285,10 +366,11 @@ clawhub install openmaic
 1. PostgreSQL cluster + S3 storage
 2. Self-hosted LLM (Ollama/Lemonade) или enterprise API
 3. SSO интеграция
-4. Кастомные роли агентов
+4. Кастомные роли агентов (промпты, поведение)
 5. Брендинг (логотип, цвета, шрифты)
 6. Аналитика обучения (GA4 / кастомная)
 7. SLA 99.9%
+8. SCORM/LTI/xAPI (если нужна LMS интеграция)
 ```
 
 **Время:** 1-2 недели | **Стоимость:** $200-500/мес
@@ -302,13 +384,13 @@ clawhub install openmaic
 | **Качество кода** | 8/10 | Чистая архитектура, TypeScript, LangGraph |
 | **Архитектура** | 9/10 | Плагиновая, масштабируемая, гибкая |
 | **Документация** | 7/10 | Хорошая README, есть архитектурные схемы |
-| **Сообщество** | 8/10 | 27K stars, активные релизы |
-| **Рыночная актуальность** | 9/10 | EdTech AI — главный тренд 2026 |
-| **Конкурентоспособность** | 8/10 | Уникальный multi-agent подход |
+| **Сообщество** | 8/10 | 27K stars, 63 контрибьютора, ежедневные коммиты |
+| **Рыночная актуальность** | 9/10 | AI Education $11.4 млрд (2026), CAGR 25.9% |
+| **Конкурентоспособность** | 8/10 | Уникальный multi-agent classroom (нет прямых аналогов) |
 | **Скорость внедрения** | 7/10 | 1-2 часа до MVP, 1-2 дня до prod |
 | **Стоимость владения** | 7/10 | MIT бесплатно, LLM API — основной расход |
 | **Масштабируемость** | 8/10 | PostgreSQL + S3 + LangGraph |
-| **Интегрируемость** | 8/10 | OpenClaw, API, плагиновая storage |
+| **Интегрируемость** | 8/10 | OpenClaw, API, SDK пакеты |
 | **Итого** | **7.9/10** | Рекомендуется к изучению и внедрению |
 
 ---
@@ -320,6 +402,7 @@ clawhub install openmaic
 2. **Взять на вооружение export** — генерация PPTX/HTML контента может быть полезна для маркетинга
 3. **Мониторить развитие** — проект активно развивается (v1.0.0 за 5 месяцев)
 4. **Возможность интеграции** — OpenClaw skill можно адаптировать для Hermes
+5. **Возможность использования** — для генерации обучающих курсов для клиентов
 
 ### Для бизнеса:
 1. **Начать с MVP** — запустить OpenMAIC для internal training
@@ -331,6 +414,7 @@ clawhub install openmaic
 1. **LLM costs** — генерация одного урока ≈ $0.5-2.0 (нужен контроль бюджета)
 2. **Качество vs количество** — AI-курсы требуют human-in-the-loop проверки
 3. **Быстрая эволюция** — проект активно меняется, нужно следить за обновлениями
+4. **Нет LMS интеграции** — SCORM/LTI/xAPI пока не реализованы
 
 ---
 
@@ -340,11 +424,16 @@ clawhub install openmaic
 - [arXiv Paper: From MOOC to MAIC](https://arxiv.org/html/2409.03512v1)
 - [OpenMAIC Chat Demo](https://open.maic.chat/)
 - [ScriptByAI Review](https://www.scriptbyai.com/multi-agent-classroom-generator/)
-- [HolonIQ: Global EdTech Market](https://www.holoniq.com/notes/global-edtech-market-2025)
-- [MarketsandMarkets: AI in Education](https://www.marketsandmarkets.com/Market-Reports/ai-in-education-market-32516075.html)
+- [Trendshift Stats](https://trendshift.io/repositories/23518)
+- [Grand View Research: AI in Education](https://www.grandviewresearch.com/industry-analysis/artificial-intelligence-ai-education-market-report)
+- [Precedence Research: AI in Education](https://www.precedenceresearch.com/ai-in-education-market)
+- [Synthesia $4B Valuation](https://www.synthesia.io/post/series-e-200-million-4-billion-valuation-future-work)
+- [Synthflow $20M Series A](https://synthflow.ai/news/synthflow-raises-20m-series-a)
+- [Hour One Funding](https://pitchbook.com/profiles/company/300304-63)
+- [DeepTutor GitHub](https://github.com/HKUDS/DeepTutor)
 
 ---
 
 *Отчёт сгенерирован: 2026-08-26*
-*Версия анализа: v1.0*
+*Версия анализа: v2.0 (дополнена данными конкурентов и рынка)*
 *Следующее обновление: рекомендуется через 3 месяца (к v1.1.x)*
